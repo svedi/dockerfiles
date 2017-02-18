@@ -16,11 +16,10 @@ RUN cd /home/caffe && \
     git clone https://github.com/BVLC/caffe
 RUN cd /home/caffe/caffe && \
     cp Makefile.config.example Makefile.config && \
-    sed -i 's:^# USE_CUDNN = 1:USE_CUDNN = 1:' -i Makefile.config && \
+    sed -e 's:^# USE_CUDNN = 1:USE_CUDNN = 1:' -i Makefile.config && \
     echo "LIBRARIES += hdf5_serial hdf5_serial_hl" >> Makefile && \
     echo "INCLUDE_DIRS := \$(PYTHON_INCLUDE) /usr/local/include /usr/include/hdf5/serial/" >> Makefile.config && \
-    echo "LIBRARY_DIRS := \$(PYTHON_LIB) /usr/local/lib /usr/lib /usr/lib/x86_64-linux-gnu/hdf5/serial/" >> Makefile.config
-RUN cd /home/caffe/caffe && \
+    echo "LIBRARY_DIRS := \$(PYTHON_LIB) /usr/local/lib /usr/lib /usr/lib/x86_64-linux-gnu/hdf5/serial/" >> Makefile.config && \
     make clean && \
     make all -j8 && \
     make pycaffe -j8 && \
