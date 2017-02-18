@@ -20,7 +20,8 @@ RUN cd /home/caffe && \
     git fetch --all && \
     git checkout --track -b deconv-deep-vis-toolbox yosinski/deconv-deep-vis-toolbox && \
     cp Makefile.config.example Makefile.config && \
-    sed -e 's|^# USE_CUDNN := 1|USE_CUDNN := 1|' -i Makefile.config && \
+# Does not seem to work to build the deepviz toolbox with cudnn
+#    sed -e 's|^# USE_CUDNN := 1|USE_CUDNN := 1|' -i Makefile.config && \
     echo "LIBRARIES += hdf5_serial hdf5_serial_hl" >> Makefile && \
     echo "INCLUDE_DIRS := \$(PYTHON_INCLUDE) /usr/local/include /usr/include/hdf5/serial/" >> Makefile.config && \
     echo "LIBRARY_DIRS := \$(PYTHON_LIB) /usr/local/lib /usr/lib /usr/lib/x86_64-linux-gnu/hdf5/serial/" >> Makefile.config && \
