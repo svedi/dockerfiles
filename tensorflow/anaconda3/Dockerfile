@@ -17,8 +17,10 @@ RUN cd /home/tf && \
 #    wget https://repo.continuum.io/archive/Anaconda3-4.2.0-Linux-x86_64.sh && \
 #    echo "73b51715a12b6382dd4df3dd1905b531bd6792d4aa7273b2377a0436d45f0e78  Anaconda3-4.2.0-Linux-x86_64.sh" | sha256sum -c --strict - && \
 #    bash ./Anaconda3-4.2.0-Linux-x86_64.sh -b && \
+
     PATH="/home/tf/anaconda3/bin:$PATH" && \
     conda create -n tensorflow && \
+
     # Cant use the anaconda libstd++ with tensorflow, so remove the bundled and fall back
     # on system ones. Seems to work :-)
     rm /home/tf/anaconda3/lib/libstd*
@@ -28,4 +30,4 @@ USER root:root
 # It remains to copy the tensorflow wheel to the image and
 # run as tf:
 #   source activate tensorflow
-#   pip3 install --ignore-installed --upgrade /tmp/tensorflow.whl
+#   pip install --ignore-installed --upgrade /tmp/tensorflow.whl

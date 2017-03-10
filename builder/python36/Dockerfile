@@ -22,45 +22,9 @@ RUN cd /home/python/ && \
     echo "3f7062ccf8be76491884d0e47ac8b251  Python-3.6.0.tgz" | md5sum -c --strict - && \
     tar xvf Python-3.6.0.tgz && \
     cd /home/python/Python-3.6.0 && \
-#    ./configure --enable-optimizations --prefix=/home/python/python36 && \
+    # Optimizations results in failing to build lots of modules atm
+    #./configure --enable-optimizations --prefix=/home/python/python36 && \
     ./configure --prefix=/home/python/python36 && \
-    # Running make and then make install does the make part twice for some reason
     make -j8 install
 
 USER root:root
-
-#RUN cd /home/tf/ && \
-#    mkdir src && \
-#    cd src && \
-#    wget https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-dist.zip && \
-#    mkdir bazel-0.4.4-dist && \
-#    cd bazel-0.4.4-dist && \
-#    unzip ../bazel-0.4.4-dist.zip && \
-#    bash ./compile.sh && \
-#    cd /home/tf/src && \
-#    git clone https://github.com/tensorflow/tensorflow && \
-#    cd /home/tf/src/tensorflow && \
-#    git checkout r1.0
-#USER root:root
-#RUN apt-get install -y python
-# The rest of this script does not work very well for some reason, atleast
-# not during building of the image, however, the commands work when running
-# the image. Perhaps because nvidia-docker doesn't set up all the links etc
-# during build?
-#
-#USER tf:tf
-#RUN mkdir /home/tf/bin && \
-#    cp /home/tf/src/bazel-0.4.4-dist/output/bazel /home/tf/bin/ && \
-#    cd /home/tf/src/tensorflow && \
-#    export PATH="/home/tf/bin/:$PATH" && \
-#    echo lolz && \
-#    which echo && \
-#    echo "/usr/bin/python3\\n\\n\\n\\n\\n\\n\\n\\ny\\n\\n\\n\\n\\n\\n5.2\\n" | ./configure
-#RUN cd /home/tf/src/tensorflow && \
-#    export PATH="/home/tf/bin/:$PATH" && \
-#    bazel build --config=opt --config=cuda //tensorflow/tools/pip_package:build_pip_package
-#RUN cd /home/tf/src/tensorflow && \
-#    export PATH="/home/tf/bin/:$PATH" && \
-#    bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
-
-#USER root:root
