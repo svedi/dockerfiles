@@ -1,4 +1,4 @@
-FROM nvidia/cuda:8.0-cudnn5-devel-ubuntu16.04
+FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
 
 RUN sed -e s:archive.ubuntu.com:se.archive.ubuntu.com:g -i /etc/apt/sources.list
 RUN apt-get update
@@ -17,10 +17,10 @@ RUN apt-get install -y build-essential git ca-certificates vim \
 RUN adduser --gecos "" --disabled-password tf
 USER tf:tf
 RUN cd /home/tf/ && \
-    wget https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tgz && \
-    echo "3f7062ccf8be76491884d0e47ac8b251  Python-3.6.0.tgz" | md5sum -c --strict - && \
-    tar xvf Python-3.6.0.tgz && \
-    cd /home/tf/Python-3.6.0 && \
+    wget https://www.python.org/ftp/python/3.6.1/Python-3.6.1.tgz && \
+    echo "2d0fc9f3a5940707590e07f03ecb08b9  Python-3.6.1.tgz" | md5sum -c --strict - && \
+    tar xvf Python-3.6.1.tgz && \
+    cd /home/tf/Python-3.6.1 && \
     # Optimizations results in failing to build lots of modules atm
     #./configure --enable-optimizations --prefix=/home/tf/python36 && \
     ./configure --prefix=/home/tf/python36 && \
@@ -28,15 +28,15 @@ RUN cd /home/tf/ && \
 RUN cd /home/tf/ && \
     mkdir src && \
     cd src && \
-    wget https://github.com/bazelbuild/bazel/releases/download/0.4.4/bazel-0.4.4-dist.zip && \
-    mkdir bazel-0.4.4-dist && \
-    cd bazel-0.4.4-dist && \
-    unzip ../bazel-0.4.4-dist.zip && \
+    wget https://github.com/bazelbuild/bazel/releases/download/0.4.5/bazel-0.4.5-dist.zip && \
+    mkdir bazel-0.4.5-dist && \
+    cd bazel-0.4.5-dist && \
+    unzip ../bazel-0.4.5-dist.zip && \
     bash ./compile.sh && \
     cd /home/tf/src && \
-    git clone https://github.com/tensorflow/tensorflow && \
-    cd /home/tf/src/tensorflow && \
-    git checkout r1.0
+    git clone https://github.com/tensorflow/tensorflow
+#    cd /home/tf/src/tensorflow && \
+#    git checkout r1.1-rc1
 #   pip3.6 install numpy wheel
 
 USER root:root
