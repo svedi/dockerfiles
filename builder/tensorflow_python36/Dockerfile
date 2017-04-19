@@ -24,33 +24,22 @@ RUN cd /home/tf/ && \
     # Optimizations results in failing to build lots of modules atm
     #./configure --enable-optimizations --prefix=/home/tf/python36 && \
     ./configure --prefix=/home/tf/python36 && \
-    make -j8 install
-RUN cd /home/tf/ && \
-    mkdir src && \
-    cd src && \
-    wget https://github.com/bazelbuild/bazel/releases/download/0.4.5/bazel-0.4.5-dist.zip && \
-    mkdir bazel-0.4.5-dist && \
-    cd bazel-0.4.5-dist && \
-    unzip ../bazel-0.4.5-dist.zip && \
-    bash ./compile.sh && \
+    make -j8 install && \
+    ln -s /home/tf/python36/bin/python3.6 /home/tf/python36/bin/python
+RUN mkdir /home/tf/src && \
     cd /home/tf/src && \
+    wget https://github.com/bazelbuild/bazel/releases/download/0.4.5/bazel-0.4.5-dist.zip && \
+    mkdir /home/tf/src/bazel-0.4.5-dist && \
+    cd /home/tf/src/bazel-0.4.5-dist && \
+    unzip ../bazel-0.4.5-dist.zip && \
+    rm ../bazel-0.4.5-dist.zip && \
+    bash ./compile.sh && \
+    mkdir /home/tf/bin && \
+    cp /home/tf/src/bazel-0.4.5-dist/output/bazel /home/tf/bin
+RUN cd /home/tf/src && \
     git clone https://github.com/tensorflow/tensorflow
-#    cd /home/tf/src/tensorflow && \
-#    git checkout r1.1-rc1
-#   pip3.6 install numpy wheel
-
-USER root:root
-
-# The rest of this script does not work very well for some reason, atleast
-# not during building of the image, however, the commands work when running
-# the image. Perhaps because nvidia-docker doesn't set up all the links etc
-# during build?
-#
-#USER tf:tf
-#RUN mkdir /home/tf/bin && \
-#    cp /home/tf/src/bazel-0.4.4-dist/output/bazel /home/tf/bin/ && \
-#    cd /home/tf/src/tensorflow && \
-#    export PATH="/home/tf/bin/:$PATH" && \
-#    ./configure && \
-#    bazel build --config=opt --config=cuda //tensorflow/tools/pip_package:build_pip_package && \
-#    bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
+ENV PATH="/home/tf/bin:/home/tf/python36/bin:$PATH"
+RUN pip3 install numpy wheel
+ADD ["build.sh", "/home/tf/bin"]
+WORKDIR "/home/tf/src/tensorflow"
+ENTRYPOINT ["build.sh"]
